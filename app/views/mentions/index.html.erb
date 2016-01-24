@@ -1,0 +1,28 @@
+<html>
+	<body>
+		<h1>What user do you want to lookup?</h1>
+
+		<%= form_tag mentions_index_path, :method => 'get' do %>
+		  <p>
+		    <%= text_field_tag :search, params[:search] %>
+		    <%= submit_tag "Search", :name => nil %>
+		  </p>
+		<% end %>
+
+		<% if @search %>
+			<% @twitter.search(@search).take(200).collect do |tweet| %>
+				<b><p><%= tweet.user.screen_name %></p></b>
+				<p><%= tweet.text %></p>
+				<% if(tweet.media.present?) %>
+					
+					<% if imageExists(tweet.media[0]["media_url"]).exists? %>
+						<img id="star" src="/star.png" alt="Smiley face" height="42" width="42">
+						<%= link_to image_tag(tweet.media[0]["media_url"], :size => tweet.media[0]["sizes"]["thumb"]), mentions_path(image_url: tweet.media[0]["media_url"]), :method => :delete %>
+					<% else %>
+						<%= link_to image_tag(tweet.media[0]["media_url"], :size => tweet.media[0]["sizes"]["thumb"]), mentions_path( user_id: current_user.id, image_url: tweet.media[0]["media_url"]), :method => :post %>
+					<% end %>
+				<% end %>
+			<% end %>
+		<% end %>
+	</body>
+</html>

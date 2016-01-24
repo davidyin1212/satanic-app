@@ -1,0 +1,13 @@
+<form action="<%= dashboard_index_path %>">
+  Jump to Date
+  <input type="date" name="date">
+  <input type="submit">
+</form>
+
+<% @tweets.each do |tweet| %>
+	<% if tweet.media.exists? %>
+		<%= image_tag tweet.media.url(:medium) %>
+	<% end %>
+	<h1><%= tweet.post_name %></h1>
+	<p><%= tweet.body %></p>
+<% end %>
